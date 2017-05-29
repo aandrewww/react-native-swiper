@@ -11,7 +11,8 @@ import {
   TouchableOpacity,
   ViewPagerAndroid,
   Platform,
-  ActivityIndicator
+  ActivityIndicator,
+  Animated
 } from 'react-native'
 
 const { width, height } = Dimensions.get('window')
@@ -207,6 +208,8 @@ export default class extends Component {
     initState.dir = props.horizontal === false ? 'y' : 'x'
     initState.width = props.width || width
     initState.height = props.height || height
+    initState.animatedHeight = props.animatedHeight || 0
+
     newInternals.offset = {}
 
     if (initState.total > 1) {
@@ -625,9 +628,9 @@ export default class extends Component {
     }
 
     return (
-      <View style={[styles.container, {
+      <Animated.View style={[styles.container, {
         width: state.width,
-        height: state.height
+        height: state.animatedHeight !== 0 ? state.animatedHeight : state.height
       }]}>
         {this.renderScrollView(pages)}
         {props.showsPagination && (props.renderPagination
@@ -635,7 +638,7 @@ export default class extends Component {
           : this.renderPagination())}
         {this.renderTitle()}
         {this.props.showsButtons && this.renderButtons()}
-      </View>
+      </Animated.View>
     )
   }
 }
